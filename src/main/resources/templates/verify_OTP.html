@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+
+    <meta charset="UTF-8" />
+    <title>OTP Verification</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #000;
+        }
+
+        #login {
+            width: 100%;
+            min-height: 100vh;
+            background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(10, 10, 10, 0.8)), url('/images/image/forgot') no-repeat center center;
+            background-size: cover;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 30px 15px;
+            box-sizing: border-box;
+        }
+
+        #login-box {
+            width: 100%;
+            max-width: 480px;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            padding: 40px 30px;
+            border-radius: 16px;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.6);
+            text-align: center;
+            color: white;
+            animation: zoomIn 0.5s ease-in-out;
+        }
+
+        @keyframes zoomIn {
+            from {
+                transform: scale(0.95);
+                opacity: 0;
+            }
+            to {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        h3.text-center {
+            margin-bottom: 25px;
+            font-size: 26px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            color: #00ffe7;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-control {
+            width: 100%;
+            border-radius: 50px;
+            padding: 14px 18px;
+            font-size: 16px;
+            border: none;
+            outline: none;
+            background-color: rgba(255, 255, 255, 0.1);
+            color: #fff;
+            transition: all 0.3s ease;
+        }
+
+        .form-control:focus {
+            background-color: rgba(255, 255, 255, 0.2);
+            box-shadow: 0 0 0 4px rgba(0, 255, 234, 0.4);
+        }
+
+        .form-control::placeholder {
+            color: #ddd;
+        }
+
+        .btnotp {
+            padding: 14px 20px;
+            font-size: 16px;
+            font-weight: 700;
+            text-transform: uppercase;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            width: 100%;
+            max-width: 280px;
+            margin: 10px auto;
+            transition: all 0.3s ease;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btnotp.submit {
+            background: linear-gradient(to right, #00ffe7, #007bff);
+            color: #000;
+        }
+
+        .btnotp.submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0, 255, 234, 0.4);
+        }
+
+        .btnotp.resend {
+            background: linear-gradient(to right, #c5d7a5, #64b378);
+            color: #000;
+        }
+
+        .btnotp.resend:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(255, 223, 0, 0.4);
+        }
+
+        .alert {
+            width: 100%;
+            max-width: 400px;
+            margin: 0 auto 20px;
+            border-radius: 12px;
+            padding: 15px;
+            font-size: 15px;
+            font-weight: bold;
+            text-align: center;
+            box-sizing: border-box;
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        .alert-success {
+            background-color: #d4edda;
+            color: #155724;
+        }
+
+        .alert-danger {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media(max-width: 600px) {
+            h3.text-center {
+                font-size: 22px;
+            }
+
+            .form-control {
+                font-size: 15px;
+                padding: 12px 15px;
+            }
+
+            .btnotp {
+                font-size: 15px;
+                padding: 13px 15px;
+            }
+
+            #login-box {
+                padding: 30px 20px;
+            }
+        }
+    </style>
+
+</head>
+<body>
+
+<section>
+    <div id="login">
+        <div id="login-box">
+            <h3 class="text-center">OTP Verification</h3>
+
+            <!-- Show OTP Incorrect Message Only When otpFailed Is Set -->
+            <div id="otp-error" th:if="${session.otpFailed}" class="alert alert-danger">
+                Sorry, the OTP is incorrect. Please try again.
+            </div>
+
+            <!-- Show OTP Sent Message Only If Sent And Not Failed -->
+            <div id="otp-alert" th:if="${session.otpSent} and ${session.otpFailed} == null" class="alert alert-success">
+                We have sent OTP to your email.
+            </div>
+
+            <!-- OTP Form -->
+            <form method="post" th:action="@{/pforgot/verify-otp}">
+                <div class="form-group mt-3">
+                    <input name="otp" type="number"
+                           title="Please enter valid otp" placeholder="Enter OTP here"
+                           class="form-control" required />
+                </div>
+
+                <div class="container text-center mt-4">
+                    <button type="submit" class="btnotp submit">✔ Submit</button>
+
+                </div>
+            </form>
+
+            <!-- Resend OTP Form -->
+            <form method="post" th:action="@{/pforgot/send-OTP}">
+                <input type="hidden" name="email" th:value="${session.email}" />
+                <div class="container text-center mt-3">
+                    <button type="submit" class="btnotp resend">↻ Resend OTP</button>
+
+
+                </div>
+            </form>
+
+        </div>
+    </div>
+</section>
+
+<!-- JS to auto-hide alert -->
+<script>
+    // Hide error after 3s
+    setTimeout(() => {
+        const errorBox = document.getElementById('otp-error');
+        if (errorBox) {
+            errorBox.style.transition = 'opacity 1s ease';
+            errorBox.style.opacity = '0';
+            setTimeout(() => errorBox.style.display = 'none', 1000);
+        }
+    }, 3000);
+
+    // Hide sent message after 5s
+    setTimeout(() => {
+        const alertBox = document.getElementById('otp-alert');
+        if (alertBox) {
+            alertBox.style.transition = 'opacity 1s ease';
+            alertBox.style.opacity = '0';
+            setTimeout(() => alertBox.style.display = 'none', 1000);
+        }
+    }, 5000);
+</script>
+</body>
+</html>

@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Rooms After Payment</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- 📱 Mobile Support -->
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background: linear-gradient(to right, #f1f2b5, #135058);
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 50px auto;
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+        }
+
+        h2 {
+            text-align: center;
+            color: #1a237e;
+            margin-bottom: 30px;
+        }
+
+        .room-card {
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            padding: 20px;
+            background-color: #f8f9fa;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .room-title {
+            font-size: 20px;
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+
+        .room-info, .payment-info {
+            font-size: 15px;
+            color: #444;
+            margin: 4px 0;
+        }
+
+        .user-info {
+            font-size: 14px;
+            color: #00695c;
+            margin-top: 10px;
+        }
+
+        .status-available {
+            color: green;
+            font-weight: bold;
+        }
+
+        .status-unavailable {
+            color: red;
+            font-weight: bold;
+        }
+
+        .header {
+            background-color: #004d40;
+            padding: 15px;
+            color: white;
+            text-align: center;
+            font-size: 22px;
+            border-top-left-radius: 12px;
+            border-top-right-radius: 12px;
+        }
+
+        .back-link {
+            display: inline-block;
+            background: #00695c;
+            color: white;
+            padding: 8px 14px;
+            border-radius: 6px;
+            text-decoration: none;
+            margin-bottom: 20px;
+        }
+
+        .back-link:hover {
+            background: #004d40;
+        }
+
+        .section-title {
+            margin-top: 30px;
+            margin-bottom: 15px;
+            font-size: 18px;
+            color: #1b5e20;
+            font-weight: bold;
+            border-bottom: 1px solid #ccc;
+            padding-bottom: 5px;
+        }
+
+        .download-btn {
+            margin-top: 30px;
+            display: block;
+            width: 100%;
+            padding: 16px;
+            font-size: 18px;
+            background: #1e88e5;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            text-align: center;
+        }
+
+        .download-btn:hover {
+            background: #1565c0;
+        }
+
+        /* 📱 Responsive Styling */
+        @media (max-width: 768px) {
+            .container {
+                margin: 20px;
+                padding: 20px;
+            }
+
+            .room-title {
+                font-size: 18px;
+            }
+
+            .room-info, .payment-info, .user-info {
+                font-size: 14px;
+            }
+
+            .download-btn {
+                font-size: 16px;
+                padding: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container" id="receiptContainer">
+    <a href="/User/searchroom" class="back-link">&#8592; Back </a>
+
+    <div class="header">Room Information After Payment</div>
+
+    <div class="room-card">
+        <div class="room-title" th:text="${rooms.title}">Room Title</div>
+
+<!--        <div class="room-info"><strong>Room ID:</strong> <span th:text="${rooms.id}">101</span></div>-->
+        <div class="room-info"><strong>Type:</strong> <span th:text="${rooms.roomType}">AC</span></div>
+        <div class="room-info"><strong>Price:</strong> ₹<span th:text="${rooms.price}">1500</span></div>
+        <div class="room-info"><strong>Upload Date:</strong> <span th:text="${rooms.uploadDate}">2025-06-01</span></div>
+        <div class="room-info"><strong>Availability:</strong>
+            <span th:if="${rooms.available}" class="status-available">Available</span>
+            <span th:unless="${rooms.available}" class="status-unavailable">Not Available</span>
+            (Because you have already booked the room)
+        </div>
+
+        <div class="room-info"><strong>Location:</strong>
+            <span th:text="${rooms.location.homeno}">101</span>,
+            <span th:text="${rooms.location.street}">Main St</span>,
+            <span th:text="${rooms.location.area}">Green Park</span>,
+            <span th:text="${rooms.location.city}">Delhi</span>,
+            <span th:text="${rooms.location.district}">New Delhi</span>
+        </div>
+
+        <div class="pg-info">
+            <strong>Room Images:</strong><br>
+            <div class="row">
+                <div class="col-md-3" th:each="img : ${rooms.images}">
+                    <img th:src="@{'/User/roomoneimage/' + ${img.id}}"
+                         alt="PG Image"
+                         class="img-fluid rounded mb-2"
+                         style="max-height: 150px;" />
+                </div>
+            </div>
+        </div>
+
+
+        <div class="user-info">
+            <strong>Uploaded By:</strong> <span th:text="${rooms.user.name}">John Doe</span>
+            | <strong>Email:</strong> <span th:text="${rooms.user.email}">john@example.com</span>
+            | <strong>phone no:</strong> <span th:text="${rooms.user.mobile}">22229</span>
+        </div>
+
+        <!-- Razorpay Payment Info Section -->
+        <div class="section-title">Payment Details</div>
+
+        <div class="payment-info"><strong>Order ID:</strong> <span th:text="${payment.razorpayOrderId}">order_xyz</span></div>
+        <div class="payment-info"><strong>Payment ID:</strong> <span th:text="${payment.razorpayPaymentId}">pay_abc</span></div>
+        <div class="payment-info"><strong>Signature:</strong> <span th:text="${payment.razorpaySignature}">sig_xxx</span></div>
+        <div class="payment-info"><strong>Paid On:</strong> <span th:text="${payment.paymentTime}">2025-06-15 14:32</span></div>
+    </div>
+
+    <!-- 📥 Download Button -->
+    <button class="download-btn" onclick="downloadReceipt()">⬇ Download This Receipt</button>
+</div>
+
+<script>
+    function downloadReceipt() {
+        const container = document.getElementById('receiptContainer');
+        const content = container.innerHTML;
+
+        const htmlContent = `
+<!DOCTYPE html>
+<html>
+<head><meta charset="UTF-8"><title>Downloaded Room Receipt</title></head>
+<body>${content}</body>
+</html>`;
+
+        const blob = new Blob([htmlContent], { type: 'text/html' });
+        const url = URL.createObjectURL(blob);
+
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = 'room-receipt.html';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    }
+</script>
+
+</body>
+</html>

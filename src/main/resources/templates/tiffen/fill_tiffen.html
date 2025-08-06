@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+
+    <meta charset="UTF-8">
+    <title>Upload Tiffen Details</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(to right, #ffecd2, #fcb69f, #a1c4fd);
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        .form-wrapper {
+            background: linear-gradient(to right, #c794a2, #88dbb9);
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);
+            max-width: 850px;
+            margin: 40px auto;
+        }
+
+        .form-title {
+            color: #ff416c;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .btn-submit {
+            background: linear-gradient(to right, #ff416c, #ff4b2b);
+            color: white;
+            font-weight: bold;
+        }
+
+        .form-check-label {
+            margin-left: 5px;
+        }
+
+        .alert {
+            transition: opacity 0.5s ease-out;
+        }
+
+        .back-button {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: #fff;
+            color: #0072ff;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            text-decoration: none;
+        }
+
+        @media (max-width: 576px) {
+            .form-container {
+                padding: 25px 15px;
+            }
+
+            h2 {
+                font-size: 1.6rem;
+            }
+
+            .btn-primary {
+                font-size: 15px;
+                padding: 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <a href="/User/profile" class="back-button">&larr;</a>
+    <div class="form-wrapper">
+        <div th:if="${param.success}" class="alert alert-success text-center" id="successMsg">
+            <strong>Success!</strong> ✅ Tiffen details saved successfully.
+        </div>
+
+        <h2 class="form-title">Upload Tiffen Details</h2>
+
+        <form th:action="@{/tiffen/create-tiffen-payments}" method="post" enctype="multipart/form-data"
+              th:object="${filltiffen}" onsubmit="return validateImages()">
+
+            <!-- Basic Info -->
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <label>Tiffen Center Name</label>
+                    <input type="text" class="form-control" th:field="*{tiffencentername}" required>
+                </div>
+                <div class="col-md-6">
+                    <label>Phone Number</label>
+                    <input type="text" class="form-control" th:field="*{phonenumber}" required pattern="[0-9]{10}" maxlength="10" title="Enter 10 digit mobile number">
+                </div>
+            </div>
+
+            <!-- Location -->
+            <div class="row mb-3">
+                <div class="col-md-4">
+                    <label>Area</label>
+                    <input type="text" class="form-control" th:field="*{area}"maxlength="15" required>
+                </div>
+                <div class="col-md-4">
+                    <label>Deep Location</label>
+                    <input type="text" class="form-control" th:field="*{deeplocation}" maxlength="50" required>
+                </div>
+                <div class="col-md-4">
+                    <label>City</label>
+                    <input type="text" class="form-control" th:field="*{city}" maxlength="15" required>
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <label>District</label>
+                    <input type="text" class="form-control" th:field="*{district}" maxlength="16" required>
+                </div>
+                <div class="col-md-6">
+                    <label>Area Covered</label>
+                    <input type="text" class="form-control" th:field="*{areaCovered}" maxlength="50" required>
+                </div>
+            </div>
+
+            <!-- Tiffen Type -->
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <label>Tiffen Type</label>
+                    <select class="form-select" th:field="*{tiffentype}" required>
+                        <option value="">-- Select --</option>
+                        <option value="Veg" >Veg</option>
+                        <option value="Non-veg">Non-Veg</option>
+                        <option value="Both">Both(veg/non-veg)</option>
+                    </select>
+                </div>
+
+                <div class="col-md-6">
+                    <label>Meal Type</label>
+                    <div class="d-flex flex-wrap gap-3">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" th:field="*{mealType}" value="Lunch" id="mealLunch">
+                            <label class="form-check-label" for="mealLunch">Lunch</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" th:field="*{mealType}" value="Dinner" id="mealDinner">
+                            <label class="form-check-label" for="mealDinner">Dinner</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" th:field="*{mealType}" value="Both" id="mealBoth">
+                            <label class="form-check-label" for="mealBoth">Both(lunch/dinner)</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Price & Delivery -->
+            <div class="row mb-3">
+                <div class="col-md-4">
+                    <label>Monthly Price (₹)</label>
+                    <input type="number" class="form-control" th:field="*{pricePerMonth}" min="100" max="100000" required>
+                </div>
+                <div class="col-md-4">
+                    <label>Available</label>
+                    <select class="form-select" th:field="*{available}" required>
+                        <option value="">-- Select --</option>
+                        <option value="true">Yes</option>
+                        <option value="false">No</option>
+                    </select>
+                </div>
+                <div class="col-md-4 d-flex align-items-center">
+                    <div>
+                        <label>Delivery Available</label><br>
+                        <input class="form-check-input" type="checkbox" th:field="*{deliveryAvailable}">
+                        <span class="ms-2">Yes</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Available Days -->
+            <div class="col-mb-2">
+                <label>Available Days</label>
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" th:field="*{dayavailable}" value="Sunday" id="daySun">
+                            <label class="form-check-label" for="daySun">Sunday</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" th:field="*{dayavailable}" value="Monday" id="dayMon">
+                            <label class="form-check-label" for="dayMon">Monday</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" th:field="*{dayavailable}" value="Tuesday" id="dayTue">
+                            <label class="form-check-label" for="dayTue">Tuesday</label>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" th:field="*{dayavailable}" value="Wednesday" id="dayWed">
+                            <label class="form-check-label" for="dayWed">Wednesday</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" th:field="*{dayavailable}" value="Thursday" id="dayThu">
+                            <label class="form-check-label" for="dayThu">Thursday</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" th:field="*{dayavailable}" value="Friday" id="dayFri">
+                            <label class="form-check-label" for="dayFri">Friday</label>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" th:field="*{dayavailable}" value="Saturday" id="daySat">
+                            <label class="form-check-label" for="daySat">Saturday</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" th:field="*{dayavailable}" value="All" id="dayAll">
+                            <label class="form-check-label" for="dayAll">All Days</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Extras -->
+            <div class="mb-3">
+                <label>Includes</label>
+                <input type="text" class="form-control" th:field="*{includes}" maxlength="50" placeholder="E.g. Rice, Roti, Dal">
+            </div>
+
+            <div class="mb-3">
+                <label>Description</label>
+                <textarea class="form-control" rows="3" maxlength="50" th:field="*{description}"></textarea>
+            </div>
+
+            <div class="mb-4">
+                <label>Upload tiffen Images (Max 5)</label>
+                <input type="file" id="imageUpload" name="imagefiles" multiple accept="image/*" class="form-control" required />
+            </div>
+
+            <div class="d-grid">
+                <button type="submit" class="btn btn-submit btn-lg">Submit Tiffen Details (pay now)</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    setTimeout(() => {
+        const msg = document.getElementById("successMsg");
+        if (msg) {
+            msg.style.opacity = "0";
+            setTimeout(() => msg.remove(), 500);
+        }
+    }, 3000);
+</script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>

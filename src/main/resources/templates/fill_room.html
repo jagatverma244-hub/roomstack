@@ -1,0 +1,428 @@
+<!--<!DOCTYPE html>-->
+<!--<html xmlns:th="http://www.thymeleaf.org">-->
+
+
+<!--    &lt;!&ndash; Your search form or room table here &ndash;&gt;-->
+
+
+<!--    <head>-->
+<!--        <meta charset="UTF-8" />-->
+<!--        <meta name="viewport" content="width=device-width, initial-scale=1" />-->
+<!--        <title>Upload Room</title>-->
+<!--        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />-->
+<!--        <link href="https://fonts.googleapis.com/css2?family=Urbanist:wght@400;600;700&display=swap" rel="stylesheet" />-->
+
+<!--        <style>-->
+<!--            body {-->
+<!--                font-family: 'Urbanist', sans-serif;-->
+<!--                background: linear-gradient(to right, #ff9a9e, #fad0c4);-->
+<!--                min-height: 100vh;-->
+<!--                padding: 40px 15px;-->
+<!--                display: flex;-->
+<!--                align-items: center;-->
+<!--                justify-content: center;-->
+<!--            }-->
+
+<!--            .form-container {-->
+<!--                width: 100%;-->
+<!--                max-width: 900px;-->
+<!--                background: #fff;-->
+<!--                border-radius: 20px;-->
+<!--                padding: 35px;-->
+<!--                box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);-->
+<!--            }-->
+
+<!--            h2 {-->
+<!--                font-weight: 700;-->
+<!--                text-align: center;-->
+<!--                color: #ff416c;-->
+<!--                margin-bottom: 30px;-->
+<!--            }-->
+
+<!--            .form-label {-->
+<!--                font-weight: 600;-->
+<!--                color: #444;-->
+<!--            }-->
+
+<!--            .form-control,-->
+<!--            .form-select {-->
+<!--                border-radius: 10px;-->
+<!--                padding: 12px;-->
+<!--                font-size: 15px;-->
+<!--                background: #f9f9f9;-->
+<!--                transition: all 0.2s ease-in-out;-->
+<!--            }-->
+
+<!--            .form-control:focus,-->
+<!--            .form-select:focus {-->
+<!--                box-shadow: 0 0 0 3px rgba(255, 65, 108, 0.2);-->
+<!--                border-color: #ff416c;-->
+<!--                background: #fff;-->
+<!--            }-->
+
+<!--            .btn-primary {-->
+<!--                background: linear-gradient(to right, #ff416c, #ff4b2b);-->
+<!--                border: none;-->
+<!--                padding: 14px;-->
+<!--                font-size: 16px;-->
+<!--                font-weight: 600;-->
+<!--                border-radius: 12px;-->
+<!--                transition: background 0.3s ease;-->
+<!--            }-->
+
+<!--            .btn-primary:hover {-->
+<!--                background: linear-gradient(to right, #ff4b2b, #ff416c);-->
+<!--            }-->
+
+<!--            .alert-success {-->
+<!--                text-align: center;-->
+<!--                font-weight: 600;-->
+<!--                border-radius: 10px;-->
+<!--                padding: 12px;-->
+<!--            }-->
+
+<!--            .back-button {-->
+<!--                position: absolute;-->
+<!--                top: 20px;-->
+<!--                left: 20px;-->
+<!--                background: #fff;-->
+<!--                color: #ff416c;-->
+<!--                border-radius: 50%;-->
+<!--                width: 40px;-->
+<!--                height: 40px;-->
+<!--                display: flex;-->
+<!--                align-items: center;-->
+<!--                justify-content: center;-->
+<!--                font-size: 22px;-->
+<!--                text-decoration: none;-->
+<!--                box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);-->
+<!--            }-->
+
+<!--            .back-button:hover {-->
+<!--                background-color: #ffe0e5;-->
+<!--                color: #ff4b2b;-->
+<!--            }-->
+
+<!--            @media (max-width: 768px) {-->
+<!--                .form-container {-->
+<!--                    padding: 25px 20px;-->
+<!--                }-->
+<!--            }-->
+<!--        </style>-->
+<!--    </head>-->
+<!--    <body>-->
+
+<!--    <a href="/User/profile" class="back-button" title="Back to Profile">&#x2190;</a>-->
+
+<!--    <div class="form-container">-->
+<!--        <div th:if="${param.success}" class="alert alert-success" id="successBox">-->
+<!--            ✅ Room details saved successfully!-->
+<!--        </div>-->
+
+<!--        <h2>Upload Room Details</h2>-->
+
+<!--        <form th:action="@{/User/create-room-payment}" method="post" enctype="multipart/form-data" th:object="${fillRoomDetails}">-->
+<!--            <div class="row g-3">-->
+<!--                <div class="col-md-6">-->
+<!--                    <label class="form-label">Title</label>-->
+<!--                    <input type="text" th:field="*{title}" class="form-control" placeholder="Enter room title" required />-->
+<!--                </div>-->
+
+<!--                <div class="col-md-6">-->
+<!--                    <label class="form-label">Room Type</label>-->
+<!--                    <input type="text" th:field="*{roomType}" class="form-control" placeholder="Single/Double/Deluxe" required />-->
+<!--                </div>-->
+
+<!--                <div class="col-md-6">-->
+<!--                    <label class="form-label">Price</label>-->
+<!--                    <input type="number" th:field="*{price}" class="form-control" placeholder="Enter price" min="1" required />-->
+<!--                </div>-->
+
+<!--                <div class="col-md-6">-->
+<!--                    <label class="form-label">Upload Date</label>-->
+<!--                    <input type="date" th:field="*{uploadDate}" class="form-control" required />-->
+<!--                </div>-->
+
+<!--                <div class="col-md-12">-->
+<!--                    <label class="form-label">Description</label>-->
+<!--                    <input type="text" th:field="*{descripation}" class="form-control" placeholder="Room Description" required />-->
+<!--                </div>-->
+
+<!--                <div class="col-md-6">-->
+<!--                    <label class="form-label">Available</label>-->
+<!--                    <select th:field="*{available}" class="form-select" required>-->
+<!--                        <option value="" disabled selected>&#45;&#45; Select Availability &#45;&#45;</option>-->
+<!--                        <option th:value="true">Yes</option>-->
+<!--                        <option th:value="false">No</option>-->
+<!--                    </select>-->
+<!--                </div>-->
+
+<!--                <div class="col-md-6">-->
+<!--                    <label class="form-label">Upload Images (Max 5)</label>-->
+<!--                    <input type="file" th:field="*{imageFiles}" multiple accept="image/*" class="form-control" required />-->
+<!--                </div>-->
+
+<!--                <hr class="mt-4" />-->
+
+<!--                <div class="col-md-6">-->
+<!--                    <label class="form-label">Home No</label>-->
+<!--                    <input type="text" th:field="*{location.homeno}" class="form-control" placeholder="Flat Number" required />-->
+<!--                </div>-->
+
+<!--                <div class="col-md-6">-->
+<!--                    <label class="form-label">Street</label>-->
+<!--                    <input type="text" th:field="*{location.street}" class="form-control" required />-->
+<!--                </div>-->
+
+<!--                <div class="col-md-6">-->
+<!--                    <label class="form-label">Area</label>-->
+<!--                    <input type="text" th:field="*{location.area}" class="form-control" required />-->
+<!--                </div>-->
+
+<!--                <div class="col-md-6">-->
+<!--                    <label class="form-label">City</label>-->
+<!--                    <input type="text" th:field="*{location.city}" class="form-control" required />-->
+<!--                </div>-->
+
+<!--                <div class="col-md-6">-->
+<!--                    <label class="form-label">District</label>-->
+<!--                    <input type="text" th:field="*{location.district}" class="form-control" required />-->
+<!--                </div>-->
+<!--            </div>-->
+
+<!--            <div class="mt-4">-->
+<!--                <button type="submit" class="btn btn-primary w-100">Save Room Details</button>-->
+<!--            </div>-->
+<!--        </form>-->
+<!--    </div>-->
+
+<!--    <script>-->
+<!--        window.onload = function () {-->
+<!--            const box = document.getElementById('successBox');-->
+<!--            if (box) {-->
+<!--                setTimeout(() => box.style.display = 'none', 3000);-->
+<!--            }-->
+<!--        };-->
+<!--    </script>-->
+<!--    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>-->
+<!--    </body>-->
+<!--</html>-->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Upload Room</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Urbanist:wght@400;600;700&display=swap" rel="stylesheet" />
+
+    <style>
+        body {
+            font-family: 'Urbanist', sans-serif;
+            background: linear-gradient(to right, #ff9a9e, #fad0c4, #fbc2eb);
+            min-height: 100vh;
+            padding: 40px 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .form-container {
+            width: 100%;
+            max-width: 950px;
+            background: linear-gradient(to right, #b79b9b, #8089ac);
+            border-radius: 20px;
+            padding: 35px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+        }
+
+        h2 {
+            font-weight: 700;
+            text-align: center;
+            color: #ff416c;
+            margin-bottom: 30px;
+        }
+
+        .form-label {
+            font-weight: 600;
+            color: #444;
+        }
+
+        .form-control,
+        .form-select {
+            border-radius: 10px;
+            padding: 12px;
+            font-size: 15px;
+            background: #f9f9f9;
+            transition: all 0.2s ease-in-out;
+        }
+
+        .form-control:focus,
+        .form-select:focus {
+            box-shadow: 0 0 0 3px rgba(255, 65, 108, 0.2);
+            border-color: #ff416c;
+            background: #fff;
+        }
+
+        .btn-primary {
+            background: linear-gradient(to right, #ff416c, #ff4b2b);
+            border: none;
+            padding: 14px;
+            font-size: 16px;
+            font-weight: 600;
+            border-radius: 12px;
+            transition: background 0.3s ease;
+        }
+
+        .btn-primary:hover {
+            background: linear-gradient(to right, #ff4b2b, #ff416c);
+        }
+
+        .alert-success {
+            text-align: center;
+            font-weight: 600;
+            border-radius: 10px;
+            padding: 12px;
+        }
+
+        .back-button {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: #fff;
+            color: #ff416c;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            text-decoration: none;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .back-button:hover {
+            background-color: #ffe0e5;
+            color: #ff4b2b;
+        }
+
+        @media (max-width: 768px) {
+            .form-container {
+                padding: 25px 20px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<a href="/User/profile" class="back-button" title="Back to Profile">&#x2190;</a>
+
+<div class="form-container">
+    <div th:if="${param.success}" class="alert alert-success" id="successBox">
+        ✅ Room details saved successfully!
+    </div>
+
+    <h2>Upload Room Details</h2>
+
+    <form id="uploadForm" th:action="@{/User/create-room-payment}" method="post" enctype="multipart/form-data" th:object="${fillRoomDetails}">
+        <div class="row g-3">
+            <div class="col-md-6">
+                <label class="form-label">Title</label>
+                <input type="text" th:field="*{title}" maxlength="10" class="form-control" placeholder="Enter room title" required />
+            </div>
+
+            <div class="col-md-6">
+                <label class="form-label">Room Type</label>
+                <input type="text" th:field="*{roomType}" maxlength="9" class="form-control" placeholder="Single / Double / Deluxe" required  />
+            </div>
+
+            <div class="col-md-6">
+                <label class="form-label">Price (INR)</label>
+                <input type="number" th:field="*{price}" class="form-control" placeholder="e.g. 5000" min="100" required />
+            </div>
+
+            <div class="col-md-6">
+                <label class="form-label">Upload Date</label>
+                <input type="date" th:field="*{uploadDate}" class="form-control" required />
+            </div>
+
+            <div class="col-md-12">
+                <label class="form-label">Description</label>
+                <textarea th:field="*{descripation}" maxlength="70" class="form-control" placeholder="Short description of room" rows="2" required ></textarea>
+            </div>
+
+            <div class="col-md-6">
+                <label class="form-label">Available</label>
+                <select th:field="*{available}" class="form-select" required>
+                    <option value="" disabled selected>-- Select Availability --</option>
+                    <option th:value="true">Yes</option>
+                    <option th:value="false">No</option>
+                </select>
+            </div>
+
+            <div class="col-md-6">
+                <label class="form-label">Upload Images (Max 5)</label>
+                <input type="file" th:field="*{imageFiles}" id="imageFiles" class="form-control" accept="image/*" multiple required />
+            </div>
+
+            <hr class="mt-4" />
+
+            <div class="col-md-6">
+                <label class="form-label">Home No.</label>
+                <input type="text" th:field="*{location.homeno}" maxlength="20" class="form-control" placeholder="e.g., 22A" required />
+            </div>
+
+            <div class="col-md-6">
+                <label class="form-label">Street</label>
+                <input type="text" th:field="*{location.street}" maxlength="20" class="form-control" placeholder="e.g., Gandhi Road" required />
+            </div>
+
+            <div class="col-md-6">
+                <label class="form-label">Area</label>
+                <input type="text" th:field="*{location.area}" maxlength="15" class="form-control" placeholder="Locality or Colony" required />
+            </div>
+
+            <div class="col-md-6">
+                <label class="form-label">City</label>
+                <input type="text" th:field="*{location.city} "maxlength="16" class="form-control"  required />
+            </div>
+
+            <div class="col-md-6">
+                <label class="form-label">District</label>
+                <input type="text" th:field="*{location.district}"  maxlength="16" class="form-control"  required />
+            </div>
+        </div>
+
+        <div class="mt-4">
+            <button type="submit" class="btn btn-primary w-100">Save Room Details</button>
+        </div>
+    </form>
+</div>
+
+<script>
+    // Hide success box after 3 seconds
+    window.onload = function () {
+        const box = document.getElementById('successBox');
+        if (box) {
+            setTimeout(() => box.style.display = 'none', 3000);
+        }
+    };
+
+    // Validate max 5 images
+    document.getElementById('uploadForm').addEventListener('submit', function (e) {
+        const imageInput = document.getElementById('imageFiles');
+        if (imageInput.files.length > 5) {
+            alert("You can upload a maximum of 5 images only.");
+            e.preventDefault();
+        }
+    });
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/> <!-- 📱 Essential for mobile support -->
+  <title>Score Notification</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .card {
+      background-color: #ffffff;
+      padding: 40px;
+      border-radius: 15px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+      text-align: center;
+      max-width: 480px;
+      width: 90%;
+    }
+
+    .card h1 {
+      font-size: 24px;
+      color: #e74c3c;
+      margin-bottom: 15px;
+    }
+
+    .card p {
+      font-size: 16px;
+      color: #333333;
+      line-height: 1.6;
+    }
+
+    .warning-icon {
+      font-size: 42px;
+      color: #e74c3c;
+      margin-bottom: 15px;
+    }
+
+    @media (max-width: 480px) {
+      .card {
+        padding: 30px 20px;
+      }
+
+      .card h1 {
+        font-size: 20px;
+      }
+
+      .card p {
+        font-size: 15px;
+      }
+
+      .warning-icon {
+        font-size: 36px;
+      }
+    }
+  </style>
+</head>
+<body>
+<div class="card">
+  <div class="warning-icon">⚠️</div>
+  <h1>ID Deleted</h1>
+  <p>Your ID has been deleted. You are not eligible (no croccet).</p>
+</div>
+
+</body>
+</html>

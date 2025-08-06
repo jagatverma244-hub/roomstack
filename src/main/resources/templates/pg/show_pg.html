@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+
+    <meta charset="UTF-8">
+    <title>Search PGs</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"/>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(to right, rgb(218, 205, 205), #3c5abe);
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: auto;
+            padding: 30px 15px;
+        }
+
+        h2 {
+            text-align: center;
+            font-size: 32px;
+            margin-bottom: 25px;
+            color: #2f3e46;
+        }
+
+        .pg-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .pg-card {
+            background: linear-gradient(to right, #e59898, #84cf9f);
+            border-radius: 16px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            transition: transform 0.3s ease;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .pg-card:hover {
+            transform: translateY(-4px);
+        }
+
+        .pg-image {
+            height: 200px;
+            object-fit: cover;
+            width: 100%;
+        }
+
+        .pg-content {
+            padding: 20px;
+        }
+
+        .pg-title {
+            font-size: 20px;
+            font-weight: bold;
+            color: #374151;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        .pg-info {
+            font-size: 15px;
+            color: #555;
+            margin-bottom: 6px;
+        }
+
+        .btn {
+            display: inline-block;
+            margin-top: 10px;
+            padding: 10px 16px;
+            font-size: 14px;
+            text-align: center;
+            border-radius: 25px;
+            font-weight: bold;
+            cursor: pointer;
+            border: none;
+            text-decoration: none;
+        }
+
+        .btn-view {
+            background: linear-gradient(to right, #36d1dc, #5b86e5);
+            color: white;
+            margin-right: 8px;
+        }
+
+        .btn-view:hover {
+            background: linear-gradient(to right, #3399ff, #4a60e0);
+        }
+
+        .btn-apply {
+            background: linear-gradient(to right, #ff758c, #ff7eb3);
+            color: white;
+        }
+
+        .btn-apply:hover {
+            background: linear-gradient(to right, #ff6a8c, #f75590);
+        }
+
+        .button-group {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .no-data {
+            text-align: center;
+            font-size: 18px;
+            color: #666;
+            margin-top: 40px;
+        }
+
+        .top-search {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+        }
+
+        .search-form {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .search-form input,
+        .search-form select {
+            padding: 8px 14px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            width: 220px;
+        }
+
+        .search-btn {
+            background: #6eafb1;
+            color: white;
+            padding: 8px 20px;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+        }
+
+        .pagination {
+            display: flex;
+            justify-content: center;
+            margin-top: 30px;
+            gap: 10px;
+        }
+
+        .page-link {
+            padding: 8px 12px;
+            border-radius: 8px;
+            color: #fff;
+            background-color: #3c5abe;
+            text-decoration: none;
+        }
+
+        .page-link:hover {
+            background-color: #2f3e46;
+        }
+
+        @media (max-width: 600px) {
+            h2 {
+                font-size: 24px;
+            }
+
+            .btn {
+                width: 100%;
+            }
+
+            .pg-info {
+                font-size: 14px;
+            }
+
+            .search-form input,
+            .search-form select {
+                width: 100%;
+            }
+        }
+        .backs-link {
+            font-size: 16px;
+            text-decoration: none;
+            background-color: #214843;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 30px;
+            transition: background-color 0.3s ease;
+        }
+
+        .backs-link:hover {
+            background-color: #347a43;
+        }
+
+    </style>
+</head>
+<body>
+<a href="/User/profile" class="backs-link">&#8592; Back</a>
+<div class="container">
+
+    <div class="top-search">
+        <form class="search-form" th:action="@{/PG/searchPG}" method="get">
+            <input type="text" name="keyword" th:value="${keyword}" placeholder="Search by City or Area" />
+
+            <select name="gender" class="form-select">
+                <option value="">-- Select Gender --</option>
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+                <option value="Unisex">Unisex</option>
+            </select>
+
+            <select name="roomType" class="form-select">
+                <option value="">-- Select PG Room Type --</option>
+                <option>1 Seater</option>
+                <option>2 Seater</option>
+                <option>3 Seater</option>
+                <option>4 Seater</option>
+            </select>
+
+        <input type="text" name="minPrice" placeholder="Min Rent (₹)" />
+            <input type="text" name="maxPrice" placeholder="Max Rent (₹)" />
+            <button type="submit" class="search-btn">Search</button>
+        </form>
+
+    </div>
+
+
+    <div th:if="${#lists.isEmpty(user)}" class="no-data">No PGs found.</div>
+
+    <div th:if="${!#lists.isEmpty(user)}" class="pg-grid">
+        <div class="pg-card" th:each="pg : ${user}">
+            <img class="pg-image"
+                 th:if="${!#lists.isEmpty(pg.pgimages)}"
+                 th:src="@{/PG/pgimage/{imgId}(imgId=${pg.pgimages[0].id})}"
+                 alt="PG Image" />
+
+            <div class="pg-content">
+<!--                <div class="pg-title" th:text="${pg.PGName}">PG Name</div>-->
+                <div class="pg-info"><strong>City:</strong> <span th:text="${pg.city}">City</span></div>
+                <div class="pg-info"><strong>Area:</strong> <span th:text="${pg.area}">Area</span></div>
+                <div class="pg-info"><strong>Gender Type:</strong> <span th:text="${pg.genderType}">Unisex</span></div>
+                <div class="pg-info"><strong>distict:</strong> <span th:text="${pg.distict}">distict</span></div>
+                <div class="pg-info">
+                    <strong>Amenities:</strong>
+                    <span th:text="${#strings.arrayJoin(pg.amenities, ', ')}">Wi-Fi, Laundry, AC</span>
+                </div>
+                <div class="pg-info"><strong>PG Rule:</strong> <span th:text="${pg.PGRule}">rule</span></div>
+                <div class="pg-info"><strong>total bed :</strong> <span th:text="${pg.TOtalBedsAvailable}">6</span></div>
+                <div class="pg-info"><strong>security fee:</strong> <span th:text="${pg.securityDeposit}">8000</span></div>
+
+                <div class="pg-info"><strong> PG upload Date:</strong> <span th:text="${pg.uploadDate}"></span></div>
+                <div class="pg-info"><strong>PG Type:</strong> <span th:text="${pg.roomType}"></span></div>
+
+                <div class="pg-info"><strong>Monthly Rent:</strong> ₹<span th:text="${pg.monthlyrent}">0</span></div>
+                <div class="pg-info"><strong>Available:</strong> <span th:text="${pg.available ? 'Yes' : 'No'}"></span></div>
+
+                <div class="button-group">
+                    <a class="btn btn-view" th:href="@{'/PG/pgImage/'+${pg.id}}">View Images</a>
+                    <form th:action="@{/PG/pg-payment}" method="get" th:if="${pg.available}">
+                        <input type="hidden" name="pgId" th:value="${pg.id}" />
+                        <button type="submit" class="btn btn-apply">Apply Now</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Pagination -->
+    <div class="pagination" th:if="${totalPages > 1}">
+        <a th:each="i : ${#numbers.sequence(0, totalPages - 1)}"
+           th:href="@{/PG/searchPG(page=${i}, keyword=${keyword}, gender=${param.gender}, minPrice=${param.minPrice}, maxPrice=${param.maxPrice})}"
+           th:text="${i + 1}"
+           class="page-link"
+           th:classappend="${i == currentPage} ? 'active'">
+        </a>
+    </div>
+</div>
+
+</body>
+</html>

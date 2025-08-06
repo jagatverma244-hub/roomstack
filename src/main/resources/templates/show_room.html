@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+
+  <meta charset="UTF-8">
+  <title>All Room Details</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(to right, #c2bf99, #8b7412);
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 40px auto;
+      padding: 20px;
+    }
+
+    h2 {
+      text-align: center;
+      font-size: 36px;
+      font-weight: bold;
+      color: #2b2e4a;
+      margin-bottom: 30px;
+    }
+
+    .back-icon {
+      display: inline-block;
+      font-size: 16px;
+      background-color: #2b2e4a;
+      color: white;
+      padding: 10px 20px;
+      border-radius: 30px;
+      text-decoration: none;
+      margin-bottom: 20px;
+      transition: all 0.3s ease;
+    }
+
+    .back-icon:hover {
+      background-color: #1f2233;
+    }
+
+    .search-form {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+
+    .search-form input[type="text"] {
+      padding: 12px 18px;
+      width: 60%;
+      max-width: 400px;
+      border-radius: 30px;
+      border: 1px solid #ccc;
+      font-size: 16px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+    }
+
+    .search-form button {
+      padding: 12px 24px;
+      border-radius: 30px;
+      background: linear-gradient(to right, #ff7e5f, #feb47b);
+      color: white;
+      font-size: 16px;
+      border: none;
+      margin-left: 10px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    .search-form button:hover {
+      background: linear-gradient(to right, #ff6a4d, #fca55f);
+    }
+
+    .room-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 30px;
+    }
+
+    .room-card {
+      background: white;
+      border-radius: 18px;
+      overflow: hidden;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+      transition: transform 0.3s ease;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .room-card:hover {
+      transform: translateY(-5px);
+    }
+
+    .room-image {
+      width: 100%;
+      height: 180px;
+      object-fit: cover;
+      background-color: #eee;
+    }
+
+    .room-content {
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .room-title {
+      font-size: 20px;
+      color: #2b2e4a;
+      font-weight: 600;
+      text-align: center;
+    }
+
+    .room-info {
+      font-size: 15px;
+      color: #333;
+    }
+
+    .availability {
+      padding: 10px;
+      border-radius: 8px;
+      font-weight: bold;
+      text-align: center;
+      margin-bottom: 10px;
+    }
+
+    .available {
+      background-color: #e0f8eb;
+      color: #1b7d42;
+    }
+
+    .not-available {
+      background-color: #fce8e6;
+      color: #c0392b;
+    }
+
+    .btn, .btn-disabled {
+      padding: 12px 20px;
+      font-size: 15px;
+      border-radius: 30px;
+      text-decoration: none;
+      text-align: center;
+      cursor: pointer;
+      transition: background 0.3s;
+      font-weight: bold;
+      margin-top: 10px;
+    }
+
+    .btn {
+      background: linear-gradient(to right, #36d1dc, #5b86e5);
+      color: white;
+      border: none;
+    }
+
+    .btn:hover {
+      background: linear-gradient(to right, #3399ff, #4a60e0);
+    }
+
+    .btn-disabled {
+      background-color: #999;
+      color: white;
+      border: none;
+      cursor: not-allowed;
+    }
+
+    .no-data {
+      text-align: center;
+      font-size: 18px;
+      color: #555;
+      margin-top: 60px;
+    }
+
+    .pagination {
+      text-align: center;
+      margin-top: 40px;
+    }
+
+    .pagination a {
+      display: inline-block;
+      margin: 0 6px;
+      padding: 10px 16px;
+      background-color: #2b2e4a;
+      color: white;
+      border-radius: 30px;
+      text-decoration: none;
+      font-size: 15px;
+    }
+
+    .pagination a.active,
+    .pagination a:hover {
+      background-color: #1a1d32;
+    }
+
+    @media (max-width: 600px) {
+      .container {
+        padding: 10px;
+      }
+
+      .search-form input[type="text"] {
+        width: 90%;
+        margin-bottom: 10px;
+      }
+
+      .search-form button {
+        width: 100%;
+        margin-top: 5px;
+      }
+
+      .btn, .btn-disabled {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <a href="/User/profile" class="back-icon">&#x2190; Back</a>
+  <h2>All Room Details</h2>
+
+  <form class="search-form" th:action="@{/User/searchroom}" method="get">
+    <input th:value="${keyword}" type="text" name="keyword" placeholder="Search by city, area, or price..." />
+    <button type="submit">Search</button>
+  </form>
+
+  <div th:if="${#lists.isEmpty(user)}" class="no-data">No rooms available.</div>
+
+  <div th:if="${!#lists.isEmpty(user)}" class="room-grid">
+    <div class="room-card" th:each="r : ${user}">
+      <img class="room-image"
+           th:if="${!#lists.isEmpty(r.images)}"
+           th:src="@{/User/roomoneimage/{imgId}(imgId=${r.images[0].id})}"
+           alt="Room Image" />
+
+      <div class="room-content">
+        <div th:if="${#lists.isEmpty(r.searchRoomPayments)} and ${r.available}" class="availability available">
+          ✅ Room is available
+        </div>
+        <div th:if="${!#lists.isEmpty(r.searchRoomPayments) or !r.available}" class="availability not-available">
+          ❌ Room is not available
+        </div>
+
+        <div class="room-title" th:text="${r.title}">Room Title</div>
+        <div class="room-info"><strong>City:</strong> <span th:text="${r.location.city}">City</span></div>
+        <div class="room-info"><strong>District:</strong> <span th:text="${r.location.district}">District</span></div>
+        <div class="room-info"><strong>Available:</strong> <span th:text="${r.available}">Yes/No</span></div>
+        <div class="room-info"><strong>Price:</strong> ₹<span th:text="${r.price}">0000</span></div>
+        <div class="room-info"><strong>Area:</strong> <span th:text="${r.location.area}">0000</span></div>
+        <div class="room-info"><strong>Upload Date:</strong> <span th:text="${r.uploadDate}">uploadDate</span></div>
+        <div class="room-info"><strong>Room Type:</strong> <span th:text="${r.roomType}">Room Type</span></div>
+<!--        <div class="room-info"><strong>Uploaded By:</strong> <span th:text="${r.user.name}">Uploader</span></div>-->
+
+        <a th:href="@{'/User/roomImage/' + ${r.id}}" class="btn">View Images</a>
+
+        <div th:if="${!#lists.isEmpty(r.searchRoomPayments) or !r.available}">
+          <button type="button" class="btn-disabled" disabled>Room Booked</button>
+        </div>
+
+        <form th:if="${#lists.isEmpty(r.searchRoomPayments)} and ${r.available}" th:action="@{/User/room-payment}" method="post">
+          <input type="hidden" name="roomId" th:value="${r.id}" />
+          <button type="submit" class="btn">Apply Room</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <div class="pagination" th:if="${totalPages > 1}">
+    <a th:each="i : ${#numbers.sequence(0, totalPages - 1)}"
+       th:href="@{/User/searchroom(keyword=${keyword}, page=${i})}"
+       th:text="${i + 1}"
+       th:classappend="${i == currentPage} ? 'active'">1</a>
+  </div>
+</div>
+
+</body>
+</html>

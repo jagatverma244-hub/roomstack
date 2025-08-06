@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>PG Payment Success</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background: linear-gradient(to right, #f1f2b5, #135058);
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 50px auto;
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+        }
+
+        h2 {
+            text-align: center;
+            color: #1a237e;
+            margin-bottom: 30px;
+        }
+
+        .pg-card {
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            padding: 20px;
+            background-color: #f8f9fa;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .pg-title {
+            font-size: 20px;
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+
+        .pg-info, .payment-info {
+            font-size: 15px;
+            color: #444;
+            margin: 4px 0;
+        }
+
+        .owner-info {
+            font-size: 14px;
+            color: #00695c;
+            margin-top: 10px;
+        }
+
+        .section-title {
+            margin-top: 30px;
+            margin-bottom: 15px;
+            font-size: 18px;
+            color: #1b5e20;
+            font-weight: bold;
+            border-bottom: 1px solid #ccc;
+            padding-bottom: 5px;
+        }
+
+        .header {
+            background-color: #004d40;
+            padding: 15px;
+            color: white;
+            text-align: center;
+            font-size: 22px;
+            border-top-left-radius: 12px;
+            border-top-right-radius: 12px;
+        }
+
+        .download-btn {
+            margin-top: 30px;
+            display: block;
+            width: 100%;
+            padding: 16px;
+            font-size: 18px;
+            background: #1e88e5;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            text-align: center;
+        }
+        .back-link {
+            display: inline-block;
+            background: #00695c;
+            color: white;
+            padding: 8px 14px;
+            border-radius: 6px;
+            text-decoration: none;
+            margin-bottom: 20px;
+        }
+
+        .back-link:hover {
+            background: #004d40;
+        }
+
+        .download-btn:hover {
+            background: #1565c0;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                margin: 20px;
+                padding: 20px;
+            }
+
+            .pg-title {
+                font-size: 18px;
+            }
+
+            .pg-info, .payment-info, .owner-info {
+                font-size: 14px;
+            }
+
+            .download-btn {
+                font-size: 16px;
+                padding: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container" id="receiptContainer">
+    <a href="/tiffen/searchtiffen" class="back-link">&#8592; Back </a>
+    <div class="header">PG Payment Confirmation</div>
+
+    <div class="pg-card">
+        <div class="pg-title" th:text="${tiffens.tiffencentername}">PG Name</div>
+
+        <div class="pg-info"><strong>Contact:</strong> <span th:text="${tiffens.phonenumber}">9999999999</span></div>
+        <div class="pg-info"><strong>Meal Type:</strong> <span th:text="${tiffens.mealType}"></span></div>
+        <div class="pg-info"><strong>Tiffen Type:</strong> <span th:text="${tiffens.tiffentype}"></span></div>
+        <div class="pg-info"><strong>Price:</strong> ₹<span th:text="${tiffens.pricePerMonth}"></span></div>
+        <div class="pg-info"><strong>Location:</strong> <span th:text="${tiffens.area}"></span>, <span th:text="${tiffens.city}"></span></div>
+<!--        <div class="pg-info"><strong>Uploaded On:</strong> <span th:text="${tiffens.}">2025-06-01</span></div>-->
+
+        <div class="pg-info"><strong>Delivery:</strong> <span th:text="${tiffens.deliveryAvailable}"></span></div>
+<!--        <div class="pg-info"><strong>images:</strong> <span th:text="${tiffens.imageFiles}">images</span></div>-->
+        <div class="pg-info"><strong>Address:</strong> <span th:text="${tiffens.deeplocation}"></span></div>
+        <div class="pg-info"><strong>District:</strong> <span th:text="${tiffens.district}"></span></div>
+
+        <div class="pg-info"><strong>Area Covered:</strong> <span th:text="${tiffens.areaCovered}"></span></div>
+        <div class="pg-info"><strong>Includes:</strong> <span th:text="${tiffens.includes}"></span></div>
+        <div class="pg-info"><strong>Available Days:</strong> <span th:text="${tiffens.dayavailable}"></span></div>
+        <div class="pg-info"><strong>Description:</strong> <span th:text="${tiffens.description}"></span></div>
+
+        <div class="pg-info">
+            <strong>tiffen Images:</strong><br>
+            <div class="row">
+                <div class="col-md-3" th:each="img : ${tiffens.tiffenimages}">
+                    <img th:src="@{'/tiffen/tiffenimage/' + ${img.id}}"
+                         alt="PG Image"
+                         class="img-fluid rounded mb-2"
+                         style="max-height: 150px;" />
+                </div>
+            </div>
+        </div>
+
+
+
+
+        <div class="owner-info">
+            <strong>Uploaded By:</strong> <span th:text="${tiffens.user.name}">John Doe</span>
+            | <strong>Email:</strong> <span th:text="${tiffens.user.email}">john@example.com</span>
+            | <strong>Phone:</strong> <span th:text="${tiffens.user.mobile}">9876543210</span>
+        </div>
+
+        <div class="section-title">Payment Details</div>
+        <div class="payment-info"><strong>Order ID:</strong> <span th:text="${payment.razorpayOrderId}">order_xyz</span></div>
+        <div class="payment-info"><strong>Payment ID:</strong> <span th:text="${payment.razorpayPaymentId}">pay_abc</span></div>
+        <div class="payment-info"><strong>Signature:</strong> <span th:text="${payment.razorpaySignature}">sig_123</span></div>
+        <div class="payment-info"><strong>Paid On:</strong> <span th:text="${payment.paymentTime}">2025-06-15 14:32</span></div>
+    </div>
+
+    <button class="download-btn" onclick="downloadReceipt()">⬇ Download This Receipt</button>
+</div>
+
+<script>
+    function downloadReceipt() {
+        const container = document.getElementById('receiptContainer');
+        const content = container.innerHTML;
+
+        const htmlContent = `
+<!DOCTYPE html>
+<html>
+<head><meta charset="UTF-8"><title>Downloaded PG Receipt</title></head>
+<body>${content}</body>
+</html>`;
+
+        const blob = new Blob([htmlContent], { type: 'text/html' });
+        const url = URL.createObjectURL(blob);
+
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = 'pg-receipt.html';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    }
+</script>
+
+</body>
+</html>
